@@ -25,8 +25,8 @@ This is the cloud version of my [Active Directory lab](https://github.com/Rushis
 | MFA control | Security defaults enabled |
 | Cost | $0. No paid licence or trial used |
 
-![Users list](screenshots/01_users.png)
-![Groups](screenshots/02_groups.png)
+![Users list](01_users.png)
+![Groups](02_groups.png)
 
 ## Step 1: Users and groups
 
@@ -36,7 +36,7 @@ I created the four users with auto-generated passwords and filled in job title a
 
 RBAC (role-based access control) means each person gets only the permissions their job needs. I assigned the built-in **Helpdesk Administrator** role to Lab IT 01. That role can reset passwords for non-admin users, but it is not a Global Administrator.
 
-![Helpdesk Administrator assignment](screenshots/03_helpdesk_role.png)
+![Helpdesk Administrator assignment](03_helpdesk_role.png)
 
 I also switched off the "Access management for Azure resources" elevated-access setting on my own admin account so it does not keep top-level access it does not need.
 
@@ -44,18 +44,18 @@ I also switched off the "Access management for Azure resources" elevated-access 
 
 MFA (multi-factor authentication) asks for a second proof of identity, such as a code from a phone app, on top of the password. Security defaults is the free way to turn it on for everyone.
 
-![Security defaults enabled](screenshots/04_security_defaults.png)
+![Security defaults enabled](04_security_defaults.png)
 
 I signed in as Lab HR 01 in a private window. The first sign-in forced a password change, and the next screen demanded MFA setup ("Let's keep your account secure") with no skip option shown. A user with only a password cannot get in. I did not finish the MFA registration, because the prompt itself is the evidence.
 
-![MFA required](screenshots/05_mfa_required.png)
+![MFA required](05_mfa_required.png)
 
 ## Step 4: Failed sign-ins and the sign-in logs
 
 I typed a wrong password three times for Lab Sales 01. Each attempt shows up in the sign-in logs as a failure with error code **50126**, "Error validating credentials due to invalid username or password". The log also shows the other users' successful and interrupted sign-ins during the first-login flow.
 
-![Sign-in log list](screenshots/06_signin_failures_list.png)
-![Error 50126](screenshots/07_signin_50126.png)
+![Sign-in log list](06_signin_failures_list.png)
+![Error 50126](07_signin_50126.png)
 
 This is the cloud version of the failed logons (event 4625) I detected in the Sentinel lab.
 
@@ -67,20 +67,20 @@ This repeats what my `Disable-LabUser.ps1` script did in the AD lab:
 2. Disabled the account
 3. Removed the user from `Sales-Team`
 
-![Group member removed](screenshots/08_group_member_removed.png)
+![Group member removed](08_group_member_removed.png)
 
 Then I tried to sign in as that user. The sign-in page says the account is locked.
 
-![Blocked sign-in](screenshots/09_disabled_user_blocked.png)
+![Blocked sign-in](09_disabled_user_blocked.png)
 
 The audit log shows the whole sequence with times: the session revoke (15:46:53), **Disable account** (15:47:26) and **Remove member from group** (15:48:19).
 
-![Audit log](screenshots/10_audit_offboarding.png)
-![Audit log detail](screenshots/11_audit_detail.png)
+![Audit log](10_audit_offboarding.png)
+![Audit log detail](11_audit_detail.png)
 
 The sign-in log gives the real reason as error **50057**, "The user account is disabled."
 
-![Error 50057](screenshots/12_signin_50057.png)
+![Error 50057](12_signin_50057.png)
 
 ## Things I learned and problems I ran into
 
